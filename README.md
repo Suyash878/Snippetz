@@ -1,4 +1,4 @@
-# Snippetz
+# SnippetZ
 My own code editor, [Github-gist](https://gist.github.com/starred) inspired.
 
 ## Backend Structure
