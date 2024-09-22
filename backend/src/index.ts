@@ -6,7 +6,7 @@ const app = new Hono()
 
 app.get('/api/v1', (c):any => 
 {
-	return c.text('Server is healthy!');
+	return c.text('Server is working!');
 })
 
 app.route('/api/v1/user', user);
