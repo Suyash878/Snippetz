@@ -12,5 +12,4 @@ app.get('/api/v1', (c):any =>
 app.route('/api/v1/user', user);
 app.route('/api/v1/gist', gist);
 
-export default app;
 
