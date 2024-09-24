@@ -13,3 +13,6 @@ app.route('/api/v1/user', user);
 app.route('/api/v1/gist', gist);
 
 
+export default {
+	fetch: app.fetch, // This tells Cloudflare Workers to use the app's fetch handler
+  };

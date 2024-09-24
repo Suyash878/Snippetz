@@ -1,5 +1,5 @@
 # SnippetZ
-My own code editor, [Github-gist](https://gist.github.com/starred) inspired.
+Code sharing made easy, [Github-gist](https://gist.github.com/starred) inspired.
 
 ## Backend Structure
 This is my planned backend structure for the API.

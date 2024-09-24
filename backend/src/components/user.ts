@@ -1,10 +1,13 @@
 import { Hono } from "hono";
+import { PrismaClient } from '@prisma/client/edge'
+import { withAccelerate } from '@prisma/extension-accelerate'
 
+const prisma = new PrismaClient().$extends(withAccelerate())
 const user = new Hono();
 
-user.post('/signup', (c):any => 
+user.post('/signup', async (c):any => 
 {
-    return c.text('this is the signup route');
+    const {username,password} = await body.username;
 })
 
 user.post('/signin', (c):any => 
