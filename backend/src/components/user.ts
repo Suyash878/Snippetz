@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { PrismaClient } from '@prisma/client/edge'
 import { sign } from "hono/jwt";
 import { withAccelerate } from '@prisma/extension-accelerate'
+import { sigupInput } from "../zod/zod";
 
 const user = new Hono<{
     Bindings:
@@ -23,6 +24,13 @@ user.post('/signup', async (c:any) =>
     const {username,password} = await c.req.json();
     
     // Need to add schema validation (USING ZOD) and password hashing.
+    const {success} = sigupInput.safeParse(c.req.body);
+
+    if(!success)
+    {
+        return c.text("Invalid inputs",411);
+    }
+
     try 
     {
         await prisma.user.create({
@@ -47,9 +55,7 @@ user.post('/signup', async (c:any) =>
 })
 
 user.post('/signin', async (c:any) => 
-{
-    const {username, password} = await c.req.json();
-    
+{   
     const prisma = new PrismaClient({
         datasources: {
           db: {
@@ -58,6 +64,14 @@ user.post('/signin', async (c:any) =>
         },
       }).$extends(withAccelerate());
 
+    const {username, password} = await c.req.json();
+    const {success} = sigupInput.safeParse(c.req.body);
+
+    if(!success)
+    {
+        return c.text("Invalid inputs",411);
+    }
+    
     const user = await prisma.user.findUnique({
         where:
         {
