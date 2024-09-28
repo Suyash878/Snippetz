@@ -67,13 +67,16 @@ user.post('/signin', async (c:any) =>
         },
       }).$extends(withAccelerate());
 
-    const {username, password} = await c.req.json();
-    const {success} = signinInput.safeParse(c.req.body);
+      const body = await c.req.json(); 
+      const { success } = signinInput.safeParse(body);
 
     if(!success)
     {
         return c.text("Invalid inputs",411);
     }
+
+    // proceed if inputs are valid.
+    const { username, password } = body;
     
     const user = await prisma.user.findUnique({
         where:

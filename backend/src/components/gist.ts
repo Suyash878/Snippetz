@@ -21,17 +21,19 @@ gist.post('/creategist',auth,async (c:any) =>
         },
       }).$extends(withAccelerate());
 
-      const {content,id} = await c.req.json();
-      const {success} = gistInput.safeParse(c.req.body);      
+      const body = await c.req.json();
+      const {success} = gistInput.safeParse(body);      
 
       if(!success)
       {
         return c.text("Gist cannot be empty",411);
       }
 
+      const {content} = body;
+
       try 
       {
-         await prisma.gist.create({
+         const createdGist = await prisma.gist.create({
             //@ts-ignore
             data: 
             {
@@ -40,8 +42,8 @@ gist.post('/creategist',auth,async (c:any) =>
          })  
          
          return c.json({
-            content: `${content}`,
-            id: `${id}`
+            content: createdGist.content,
+            id: createdGist.id
          });
       }
       catch(err) 
@@ -89,13 +91,14 @@ gist.get('/getgist/bulk', async (c:any) =>
           },
         }).$extends(withAccelerate());
         
-        const gists = prisma.gist.findMany();
+        const gists = await prisma.gist.findMany();
         try 
         {
-          return gists;
+          return c.json(gists);
         }
-        catch 
-        {
+        catch(err) 
+        { 
+          console.error(err);
           return c.text("Some error occurred",411);
         }
   })
@@ -111,24 +114,30 @@ gist.put('/updategist/:id',auth, async (c:any) =>
       }).$extends(withAccelerate());
 
     const updatedContent = await c.req.json();
-    const id = parseInt(c.req.params('id'));
+    const id = parseInt(c.req.param('id'));
 
     try 
     {
-        await prisma.gist.update({
+        const finalgist = await prisma.gist.update({
             where: 
             {
                 id: id
             }, 
             data: 
             {
-                content: updatedContent
+                content: updatedContent.content
             }
+        });
+        return c.json({
+          message: "Updated successfully",
+          id: finalgist.id,
+          content: finalgist.content
         })
     }
-    catch 
-    {
-        c.text('Some error occurred', 411);
+    catch(err)
+    { 
+        console.log("Error occurred:" + err);
+        return c.text('Some error occurred', 411);
     }
 })
 
@@ -142,16 +151,21 @@ gist.delete('/delete/:id',auth,async (c:any) =>
         },
       }).$extends(withAccelerate());
 
-    const id = parseInt(c.req.params('id'));
+    const id = parseInt(c.req.param('id'));
     
     try 
     { 
-        
-
+      await prisma.gist.delete({
+        where:
+        {
+          id: id
+        }
+      })
+      return c.text("Deleted Successfully");
     }
     catch 
     {
-
+      return c.text('Some error occurred');
     }
 })
 
