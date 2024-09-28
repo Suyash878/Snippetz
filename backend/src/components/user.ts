@@ -23,12 +23,15 @@ user.post('/signup', async (c:any) =>
 
     const {username,password} = await c.req.json();
     
-    // Need to add schema validation (USING ZOD) and password hashing.
-    const {success} = sigupInput.safeParse(c.req.body);
+    const body: unknown = await c.req.json();  // Parse the JSON body
 
-    if(!success)
-    {
-        return c.text("Invalid inputs",411);
+    // Validate the body using Zod schema (sigupInput)
+    const result = sigupInput.safeParse(body);  // Use sigupInput instead of signupInput
+  
+    if (!result.success) {
+      // Log validation errors for debugging
+      console.log(result.error.errors);
+      return c.json({ message: 'Invalid inputs', errors: result.error.errors }, 411);  // Send back validation errors
     }
 
     try 
@@ -50,8 +53,7 @@ user.post('/signup', async (c:any) =>
         c.status(411);
         return c.text('User already exists');
     }
-    // also assign a JWT.
-
+    
 })
 
 user.post('/signin', async (c:any) => 

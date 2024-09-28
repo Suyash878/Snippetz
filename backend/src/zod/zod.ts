@@ -1,7 +1,7 @@
 import z from "zod"
 
 export const sigupInput = z.object({
-    username: z.string().email(),
+    username: z.string().trim().email(),
     password: z.string().min(6),
     firstName: z.string(),
     lastName: z.string()
