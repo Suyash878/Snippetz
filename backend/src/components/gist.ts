@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import auth from "../middleware/authenticate";
 import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
-import { gistInput } from "../zod/zod";
+import { gistInput } from "@suyash_dev/snippetz"; 
 
 const gist = new Hono<{
     Bindings:
@@ -78,6 +78,27 @@ gist.get('/getgist/:id', async (c:any) =>
         return c.text('Some error occurred', 411);
     }  
 })
+
+gist.get('/getgist/bulk', async (c:any) => 
+  {
+      const prisma = new PrismaClient({
+          datasources: {
+            db: {
+              url: c.env.DATABASE_URL,  // Ensure DATABASE_URL contains the correct prisma:// URL
+            },
+          },
+        }).$extends(withAccelerate());
+        
+        const gists = prisma.gist.findMany();
+        try 
+        {
+          return gists;
+        }
+        catch 
+        {
+          return c.text("Some error occurred",411);
+        }
+  })
 
 gist.put('/updategist/:id',auth, async (c:any) => 
 {

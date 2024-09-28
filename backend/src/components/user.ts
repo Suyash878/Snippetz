@@ -2,7 +2,8 @@ import { Hono } from "hono";
 import { PrismaClient } from '@prisma/client/edge'
 import { sign } from "hono/jwt";
 import { withAccelerate } from '@prisma/extension-accelerate'
-import { sigupInput } from "../zod/zod";
+import { signupInput } from "@suyash_dev/snippetz";
+import { signinInput } from "@suyash_dev/snippetz";
 
 const user = new Hono<{
     Bindings:
@@ -26,7 +27,7 @@ user.post('/signup', async (c:any) =>
     const body: unknown = await c.req.json();  // Parse the JSON body
 
     // Validate the body using Zod schema (sigupInput)
-    const result = sigupInput.safeParse(body);  // Use sigupInput instead of signupInput
+    const result = signupInput.safeParse(body);  
   
     if (!result.success) {
       // Log validation errors for debugging
@@ -67,7 +68,7 @@ user.post('/signin', async (c:any) =>
       }).$extends(withAccelerate());
 
     const {username, password} = await c.req.json();
-    const {success} = sigupInput.safeParse(c.req.body);
+    const {success} = signinInput.safeParse(c.req.body);
 
     if(!success)
     {
