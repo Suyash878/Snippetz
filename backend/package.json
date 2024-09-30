@@ -5,10 +5,12 @@
     "deploy": "wrangler deploy --minify src/index.ts"
   },
   "dependencies": {
+    "@hono/swagger-ui": "^0.4.1",
     "@prisma/client": "^5.19.1",
     "@prisma/extension-accelerate": "^1.1.0",
     "@suyash_dev/snippetz": "^1.0.0",
-    "hono": "^4.6.2"
+    "hono": "^4.6.2",
+    "swagger-ui-dist": "^5.17.14"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240529.0",
