@@ -7,7 +7,7 @@ function App() {
     <>
       <div>
         <h1 className="text-3xl font-bold underline">
-          Hello world!
+          This is my gist frontend.
         </h1>
       </div>
     </>
