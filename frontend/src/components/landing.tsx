@@ -1,7 +1,14 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export const LandingPage = () => 
 {
+  const navigate = useNavigate();
+
+  const handleClick = () => 
+  {
+    navigate('/Signin');
+  }
+
     return(
     <div className='h-screen w-screen font-sans'> 
         <div className="flex justify-between px-2 py-2 rounded-3xl border-4 border-slate-400 shadow-2xl">
@@ -32,9 +39,9 @@ export const LandingPage = () =>
                       Join our community of developers today.
                     </div>
                     <div className='text-sm my-2'>
-                      <button className='border-4 border-black hover:bg-slate-900 hover:border-slate-900 text-sm rounded-lg bg-black text-slate-100'>
+                      <button onClick={handleClick} className='border-4 border-black hover:bg-slate-900 hover:border-slate-900 text-sm rounded-lg bg-black text-slate-100'>
                         <div className='mx-1 my-1'>
-                          Get started
+                            Get Started
                         </div>
                       </button>
                     </div>
